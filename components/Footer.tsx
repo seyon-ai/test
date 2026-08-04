@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Phone, Mail, MapPin, Leaf } from "lucide-react";
+import { Phone, MapPin, Leaf } from "lucide-react";
 import { clinicInfo } from "@/lib/data";
 
 export default function Footer() {
@@ -10,22 +10,13 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                  <path
-                    d="M17 8C17 8 14 6 12 8C10 10 12 14 12 14C12 14 8 12 6 14C4 16 6 20 6 20"
-                    stroke="white"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
-                  <path
-                    d="M17 8C17 8 18 10 16 12C14 14 12 14 12 14"
-                    stroke="white"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </div>
+              <svg width="28" height="34" viewBox="0 0 100 120">
+                <path d="M50 10 Q55 30 50 50 Q45 30 50 10" fill="white" />
+                <path d="M50 30 Q70 25 75 35 Q65 40 50 40" fill="white" opacity="0.85" />
+                <path d="M50 40 Q30 35 25 45 Q35 50 50 48" fill="white" opacity="0.85" />
+                <path d="M50 50 Q75 48 78 58 Q65 62 50 58" fill="white" opacity="0.8" />
+                <path d="M50 58 Q25 56 22 66 Q35 70 50 66" fill="white" opacity="0.8" />
+              </svg>
               <div>
                 <div className="font-serif text-lg font-bold">AGNIVESH</div>
                 <div className="text-xs tracking-widest text-ayurveda-sage">
@@ -97,12 +88,6 @@ export default function Footer() {
                 <Phone size={16} className="mt-0.5 shrink-0" />
                 <a href={`tel:${clinicInfo.phone.replace(/\D/g, "")}`} className="hover:text-white transition-colors">
                   {clinicInfo.phone}
-                </a>
-              </li>
-              <li className="flex items-start gap-3">
-                <Mail size={16} className="mt-0.5 shrink-0" />
-                <a href={`mailto:${clinicInfo.email}`} className="hover:text-white transition-colors">
-                  {clinicInfo.email}
                 </a>
               </li>
               <li className="flex items-start gap-3">

@@ -56,7 +56,7 @@ export default function CategoryPage({
                   {spec.category}
                 </h1>
                 <p className="text-white/80 text-sm mt-1">
-                  {spec.conditions.length} conditions treated with classical Ayurveda
+                  Classical Ayurvedic treatments
                 </p>
               </div>
             </div>

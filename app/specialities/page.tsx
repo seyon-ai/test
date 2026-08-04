@@ -59,7 +59,7 @@ export default function SpecialitiesPage() {
                         {spec.category}
                       </h2>
                       <p className="text-white/80 text-sm mt-1">
-                        {spec.conditions.length} conditions treated
+                        Ayurvedic treatments
                       </p>
                     </div>
                   </div>

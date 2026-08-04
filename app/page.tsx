@@ -57,20 +57,6 @@ function HeroSection() {
               Explore Treatments
             </Link>
           </div>
-          <div className="flex items-center gap-8 mt-10 pt-8 border-t border-ayurveda-navy/10">
-            <div>
-              <div className="font-serif text-2xl font-bold text-ayurveda-green">2</div>
-              <div className="text-xs text-ayurveda-navy/60">Expert Doctors</div>
-            </div>
-            <div>
-              <div className="font-serif text-2xl font-bold text-ayurveda-green">4+</div>
-              <div className="text-xs text-ayurveda-navy/60">Specialities</div>
-            </div>
-            <div>
-              <div className="font-serif text-2xl font-bold text-ayurveda-green">15+</div>
-              <div className="text-xs text-ayurveda-navy/60">Conditions Treated</div>
-            </div>
-          </div>
         </div>
 
         {/* Logo */}
@@ -286,33 +272,26 @@ function SpecialitiesSection() {
                   <h3 className="font-serif text-xl md:text-2xl font-bold leading-tight">
                     {spec.category}
                   </h3>
-                  <p className="text-white/80 text-sm mt-1">
-                    {spec.conditions.length} conditions treated
-                  </p>
                 </div>
               </div>
 
-              {/* Conditions preview */}
+              {/* Conditions list — names only */}
               <div className="p-6">
-                <ul className="space-y-2">
-                  {spec.conditions.slice(0, 3).map((cond) => (
+                <ul className="space-y-2.5">
+                  {spec.conditions.map((cond) => (
                     <li
                       key={cond.id}
                       className="flex items-start gap-2.5 text-sm text-ayurveda-navy/70"
                     >
                       <Leaf size={12} className="text-ayurveda-green mt-1 shrink-0" />
-                      <div>
-                        <span className="font-medium text-ayurveda-navy">
-                          {cond.name}
-                        </span>{" "}
-                        <span className="text-ayurveda-navy/40">—</span>{" "}
-                        <span className="text-ayurveda-navy/60">{cond.englishName}</span>
-                      </div>
+                      <span className="font-medium text-ayurveda-navy">
+                        {cond.name}
+                      </span>
                     </li>
                   ))}
                 </ul>
                 <div className="flex items-center gap-2 text-ayurveda-green font-medium text-sm mt-5 group-hover:gap-3 transition-all">
-                  View all conditions <ArrowRight size={14} />
+                  Learn more <ArrowRight size={14} />
                 </div>
               </div>
             </Link>
