@@ -68,7 +68,7 @@ function HeroSection() {
             <div className="absolute inset-0 bg-ayurveda-green/5 rounded-3xl transform rotate-3"></div>
             <div className="relative bg-white rounded-3xl shadow-2xl p-8 md:p-12">
               <Image
-                src="/images/logo.png"
+                src="/images/logo.jpg"
                 alt="Agnivesh Ayurveda Logo"
                 width={380}
                 height={380}

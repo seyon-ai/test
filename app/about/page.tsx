@@ -38,7 +38,7 @@ export default function AboutPage() {
           <div>
             <div className="bg-ayurveda-cream/50 rounded-3xl p-4 shadow-lg">
               <Image
-                src="/images/logo.png"
+                src="/images/logo.jpg"
                 alt="Agnivesh Ayurveda"
                 width={400}
                 height={400}
