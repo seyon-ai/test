@@ -51,7 +51,9 @@ interface Appointment {
   consultationType: "tele" | "opd";
   doctorId?: string;
   specialityId?: string;
-  dateTime: string;
+  dateTime?: string;
+  date?: string;
+  timeSlot?: string;
   status: "pending" | "confirmed" | "completed" | "cancelled";
   notes: string;
   createdAt?: any;
@@ -292,8 +294,13 @@ export default function AdminPage() {
                       <div key={apt.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
                         <div>
                           <div className="font-medium text-gray-900 text-sm">{apt.patientName}</div>
-                          <div className="text-xs text-gray-500">
-                            {apt.dateTime?.split("T")[0]} · {apt.consultationType === "tele" ? " Tele" : "📍 OPD"}
+                          <div className="text-xs text-gray-500 flex items-center gap-2 mt-0.5">
+                            <span>{apt.dateTime?.split("T")[0] || apt.date} · {apt.consultationType === "tele" ? "📱 Tele" : "📍 OPD"}</span>
+                            <span className="text-gray-300">|</span>
+                            <a href={`tel:${apt.phone}`} className="text-ayurveda-green font-medium hover:underline flex items-center gap-1">
+                              <Phone size={10} />
+                              {apt.phone}
+                            </a>
                           </div>
                         </div>
                         <span className={`text-xs px-2 py-1 rounded-full font-medium ${
@@ -339,7 +346,13 @@ export default function AdminPage() {
                           <tr key={apt.id} className="hover:bg-gray-50/50">
                             <td className="px-6 py-4">
                               <div className="font-medium text-gray-900 text-sm">{apt.patientName}</div>
-                              <div className="text-xs text-gray-500">{apt.phone}</div>
+                              <a href={`tel:${apt.phone}`} className="text-xs text-ayurveda-green font-medium hover:underline flex items-center gap-1 mt-1">
+                                <Phone size={10} />
+                                {apt.phone}
+                              </a>
+                              {apt.patientEmail && (
+                                <div className="text-xs text-gray-400 mt-0.5 truncate max-w-[200px]">{apt.patientEmail}</div>
+                              )}
                             </td>
                             <td className="px-6 py-4">
                               <span className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full ${
@@ -352,7 +365,10 @@ export default function AdminPage() {
                             <td className="px-6 py-4 text-sm text-gray-600 hidden md:table-cell">
                               {apt.doctorId || apt.specialityId || "—"}
                             </td>
-                            <td className="px-6 py-4 text-sm text-gray-600">{apt.dateTime?.split("T")[0]}</td>
+                            <td className="px-6 py-4 text-sm text-gray-600">
+                              <div>{apt.date || apt.dateTime?.split("T")[0]}</div>
+                              {apt.timeSlot && <div className="text-xs text-ayurveda-green font-medium mt-0.5">{apt.timeSlot}</div>}
+                            </td>
                             <td className="px-6 py-4">
                               <span className={`text-xs px-2 py-1 rounded-full font-medium ${
                                 apt.status === "pending" ? "bg-amber-100 text-amber-700"
