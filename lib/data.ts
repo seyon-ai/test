@@ -26,6 +26,7 @@ export const specialities = [
     id: "digestive-metabolic",
     category: "Digestive & Metabolic Disorders",
     icon: "🫃",
+    image: "/images/speciality-digestive.jpg",
     conditions: [
       {
         id: "grahani",
@@ -68,7 +69,8 @@ export const specialities = [
   {
     id: "musculoskeletal",
     category: "Musculoskeletal & Joint Diseases",
-    icon: "🦴",
+    icon: "",
+    image: "/images/speciality-joints.jpg",
     conditions: [
       {
         id: "sandhivata",
@@ -121,6 +123,7 @@ export const specialities = [
     id: "anorectal",
     category: "Anorectal Disorders",
     icon: "🩺",
+    image: "/images/speciality-anorectal.jpg",
     conditions: [
       {
         id: "arsha",
@@ -154,7 +157,8 @@ export const specialities = [
   {
     id: "menstrual-hormonal",
     category: "Menstrual & Hormonal Disorders",
-    icon: "",
+    icon: "🌸",
+    image: "/images/speciality-hormonal.jpg",
     conditions: [
       {
         id: "pcos-pcod",

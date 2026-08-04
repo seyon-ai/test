@@ -1,6 +1,7 @@
 import { specialities } from "@/lib/data";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { Leaf, ArrowRight, ArrowLeft } from "lucide-react";
 
 export function generateStaticParams() {
@@ -26,38 +27,45 @@ export default function CategoryPage({
 
   return (
     <>
-      <section className="section-padding bg-gradient-to-br from-ayurveda-cream to-white pb-12">
-        <div className="max-w-5xl mx-auto">
-          <Link
-            href="/specialities"
-            className="inline-flex items-center gap-2 text-ayurveda-green text-sm font-medium mb-8 hover:gap-3 transition-all"
-          >
-            <ArrowLeft size={16} /> All Specialities
-          </Link>
-
-          <div className="flex items-center gap-4 mb-6">
-            <div className="w-16 h-16 rounded-2xl bg-ayurveda-green/10 flex items-center justify-center text-3xl">
-              {spec.icon}
+      {/* Hero with image */}
+      <section className="relative h-72 md:h-80 overflow-hidden">
+        <Image
+          src={spec.image}
+          alt={spec.category}
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-ayurveda-green-dark/90 via-ayurveda-green-dark/60 to-ayurveda-green-dark/30" />
+        <div className="absolute inset-0 bg-gradient-to-r from-ayurveda-green-dark/50 to-transparent" />
+        
+        <div className="relative z-10 h-full max-w-5xl mx-auto px-6 md:px-12 flex items-end pb-10">
+          <div className="text-white">
+            <Link
+              href="/specialities"
+              className="inline-flex items-center gap-2 text-white/80 text-sm font-medium mb-4 hover:text-white transition-colors"
+            >
+              <ArrowLeft size={16} /> All Specialities
+            </Link>
+            <div className="flex items-center gap-4 mb-3">
+              <div className="w-14 h-14 rounded-2xl bg-white/15 backdrop-blur-sm flex items-center justify-center text-2xl border border-white/20">
+                {spec.icon}
+              </div>
+              <div>
+                <h1 className="font-serif text-3xl md:text-4xl font-bold leading-tight">
+                  {spec.category}
+                </h1>
+                <p className="text-white/80 text-sm mt-1">
+                  {spec.conditions.length} conditions treated with classical Ayurveda
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="font-serif text-3xl md:text-4xl font-bold text-ayurveda-navy">
-                {spec.category}
-              </h1>
-              <p className="text-ayurveda-navy/60 text-sm mt-1">
-                {spec.conditions.length} conditions treated
-              </p>
-            </div>
-          </div>
-
-          <div className="leaf-divider justify-start">
-            <span className="w-12 h-px bg-ayurveda-green/30"></span>
-            <Leaf className="text-ayurveda-green" size={20} />
-            <span className="w-12 h-px bg-ayurveda-green/30"></span>
           </div>
         </div>
       </section>
 
-      <section className="section-padding bg-white pt-8">
+      {/* Conditions List */}
+      <section className="section-padding bg-white">
         <div className="max-w-5xl mx-auto space-y-6">
           {spec.conditions.map((cond) => (
             <Link

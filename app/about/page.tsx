@@ -38,11 +38,11 @@ export default function AboutPage() {
           <div>
             <div className="bg-ayurveda-cream/50 rounded-3xl p-4 shadow-lg">
               <Image
-                src="/images/logo.jpg"
-                alt="Agnivesh Ayurveda"
-                width={400}
+                src="/images/herbs-ayurvedic.jpg"
+                alt="Authentic Ayurvedic Herbs"
+                width={500}
                 height={400}
-                className="rounded-2xl w-full h-auto"
+                className="rounded-2xl w-full h-auto object-cover aspect-[5/4]"
               />
             </div>
           </div>

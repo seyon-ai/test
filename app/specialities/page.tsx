@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { specialities } from "@/lib/data";
 import { Leaf, ArrowRight } from "lucide-react";
 
@@ -31,34 +32,42 @@ export default function SpecialitiesPage() {
       </section>
 
       <section className="section-padding bg-white pt-8">
-        <div className="max-w-7xl mx-auto space-y-12">
+        <div className="max-w-7xl mx-auto space-y-14">
           {specialities.map((spec, i) => (
             <div
               key={spec.id}
-              className={`grid md:grid-cols-3 gap-10 items-start ${
-                i % 2 === 1 ? "md:direction-rtl" : ""
+              className={`grid lg:grid-cols-5 gap-10 items-start ${
+                i % 2 === 1 ? "lg:direction-rtl" : ""
               }`}
             >
-              <div className={i % 2 === 1 ? "md:order-2" : ""}>
+              {/* Image */}
+              <div className={`lg:col-span-2 ${i % 2 === 1 ? "lg:order-2" : ""}`}>
                 <div className="sticky top-32">
-                  <div className="w-20 h-20 rounded-2xl bg-ayurveda-green/10 flex items-center justify-center text-4xl mb-4">
-                    {spec.icon}
+                  <div className="relative rounded-3xl overflow-hidden shadow-xl aspect-[4/3]">
+                    <Image
+                      src={spec.image}
+                      alt={spec.category}
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-ayurveda-green-dark/40 to-transparent" />
+                    <div className="absolute top-4 left-4 w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-2xl border border-white/20">
+                      {spec.icon}
+                    </div>
+                    <div className="absolute bottom-4 left-4 right-4 text-white">
+                      <h2 className="font-serif text-xl md:text-2xl font-bold leading-tight">
+                        {spec.category}
+                      </h2>
+                      <p className="text-white/80 text-sm mt-1">
+                        {spec.conditions.length} conditions treated
+                      </p>
+                    </div>
                   </div>
-                  <h2 className="font-serif text-2xl md:text-3xl font-bold text-ayurveda-navy mb-3">
-                    {spec.category}
-                  </h2>
-                  <p className="text-ayurveda-navy/60 text-sm">
-                    {spec.conditions.length} conditions treated under this
-                    speciality
-                  </p>
                 </div>
               </div>
 
-              <div
-                className={`md:col-span-2 space-y-4 ${
-                  i % 2 === 1 ? "md:order-1" : ""
-                }`}
-              >
+              {/* Conditions */}
+              <div className={`lg:col-span-3 space-y-4 ${i % 2 === 1 ? "lg:order-1" : ""}`}>
                 {spec.conditions.map((cond) => (
                   <Link
                     key={cond.id}
@@ -67,9 +76,14 @@ export default function SpecialitiesPage() {
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <h3 className="font-serif text-lg font-semibold text-ayurveda-navy group-hover:text-ayurveda-green transition-colors">
-                          {cond.name}
-                        </h3>
+                        <div className="flex items-center gap-3">
+                          <h3 className="font-serif text-lg font-semibold text-ayurveda-navy group-hover:text-ayurveda-green transition-colors">
+                            {cond.name}
+                          </h3>
+                          <span className="text-xs bg-ayurveda-green/10 text-ayurveda-green px-2 py-0.5 rounded-full">
+                            {cond.sanskritName}
+                          </span>
+                        </div>
                         <p className="text-ayurveda-green text-sm font-medium mt-1">
                           {cond.englishName}
                         </p>
