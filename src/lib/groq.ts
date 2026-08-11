@@ -4,23 +4,59 @@ export function getGroq() {
   return new Groq({ apiKey: process.env.GROQ_API_KEY || "gsk_dummy" });
 }
 
-export const REACTOR_SYSTEM = `You are IGMA's audience reactor. User shares an imaginary situation. React in 1-4 sentences ONLY. Never continue their story, never rewrite it, never add plot. Be a witty audience member reacting. Match their mood tag if given. Be concise, warm, and human.`;
+// --- BETTER INSTRUCTIONS — tight, no weird drift ---
+export const REACTOR_SYSTEM = `You are IGMA's "Audience Reactor".
+RULES — obey strictly:
+- React ONLY in 1-4 sentences.
+- NEVER continue the user's story, NEVER rewrite it, NEVER add new characters/plot.
+- Be a real audience member: witty, warm, human, specific to their mood tag.
+- Match mood: Comedy=playful, Fantasy=wonder, Horror=spooked, Romance=tender, Sci-Fi=curious.
+- No meta talk, no "As an AI", no disclaimers, no hashtags.
+Example: User: "I found a door in my fridge to last Tuesday." → You: "The fridge-to-Tuesday pipeline is unhinged. Are snacks still cold on the other side?"`;
 
-export const STUDIO_SYSTEM = `You are IGMA Imagine Studio collaborator. Help user build a story scene by scene. Ask questions, suggest vivid details, keep momentum. Be creative, encouraging, concise (2-4 sentences). Never be the public reactor voice.`;
+export const STUDIO_SYSTEM = `You are IGMA Imagine Studio — a focused story collaborator.
+RULES:
+- Help build the story scene by scene. Ask 1 vivid question at a time, suggest 1 concrete detail.
+- 2-4 sentences max, warm, cinematic.
+- NEVER be the sarcastic reactor voice. Stay encouraging and tight.
+- If user is stuck, offer 2 options: "Do you want to go darker or more hopeful?"
+- Never repeat the user's text verbatim, never be verbose, never add disclaimers.`;
 
 export async function generateReaction(text: string, mood: string, personality: string = "Balanced") {
   const groq = getGroq();
-  const personalityNote = personality !== "Balanced" ? ` Tone: ${personality}.` : "";
+  const tone: Record<string,string> = {
+    Balanced: "tone: balanced, clever",
+    Wholesome: "tone: wholesome, sweet, encouraging",
+    Sarcastic: "tone: dry, witty, light sarcasm — never mean",
+    Hype: "tone: hyped, energetic, Gen-Z",
+  };
   const c = await groq.chat.completions.create({
     model: "llama-3.3-70b-versatile",
     messages: [
-      { role: "system", content: REACTOR_SYSTEM + personalityNote },
-      { role: "user", content: `Mood: ${mood}\nStory: ${text}\n\nReact now:` },
+      { role: "system", content: REACTOR_SYSTEM + "\n" + (tone[personality] || "") },
+      { role: "user", content: `Mood: ${mood}\nStory: """${text}"""\nReact now (1-4 sentences):` },
     ],
-    max_tokens: 180,
-    temperature: 0.9,
+    max_tokens: 160,
+    temperature: 0.75,
   });
-  return c.choices[0]?.message?.content?.trim() || "Whoa — I wasn't ready for that twist. Love the imagination!";
+  return c.choices[0]?.message?.content?.trim().slice(0, 320) || "Whoa — that twist caught me. More please!";
+}
+
+export async function generateStudioReply(history: {role:string, content:string}[], personality="Balanced") {
+  const groq = getGroq();
+  const tone: Record<string,string> = {
+    Balanced: "", Wholesome: " Be wholesome.", Sarcastic: " Be lightly witty.", Hype: " Be hyped."
+  };
+  const c = await groq.chat.completions.create({
+    model: "llama-3.3-70b-versatile",
+    messages: [
+      { role: "system", content: STUDIO_SYSTEM + (tone[personality]||"") },
+      ...history.map(m=>({ role: m.role as any, content: m.content })),
+    ],
+    max_tokens: 320,
+    temperature: 0.82,
+  });
+  return c.choices[0]?.message?.content?.trim() || "Love that — what sound is in the air there?";
 }
 
 export async function generateScript(chatHistory: {role:string, content:string}[]) {
@@ -28,13 +64,18 @@ export async function generateScript(chatHistory: {role:string, content:string}[
   const c = await groq.chat.completions.create({
     model: "llama-3.3-70b-versatile",
     messages: [
-      { role: "system", content: `Turn the conversation into a reel script JSON. Output ONLY valid JSON: {"title":"...", "scenes":[{"caption":"short caption 10-20 words","imagePrompt":"detailed image generation prompt, cinematic, photorealistic"}]} 3-6 scenes.` },
+      { role: "system", content: `Turn the conversation into a reel script JSON. Output ONLY valid JSON: {"title":"3-5 words, cinematic","scenes":[{"caption":"12-18 words, present tense, vivid","imagePrompt":"detailed portrait 9:16 photorealistic cinematic prompt"}]}. 4-6 scenes. Keep captions TIGHT and imagePrompts highly visual.` },
       ...chatHistory.map(m=>({ role: m.role as any, content: m.content })),
     ],
-    max_tokens: 1000,
+    max_tokens: 1200,
     temperature: 0.8,
     response_format: { type: "json_object" } as any,
   });
   const raw = c.choices[0]?.message?.content || "{}";
-  try { return JSON.parse(raw); } catch { return { title: "Untitled Imagination", scenes: [{caption: chatHistory.slice(-1)[0]?.content?.slice(0,80) || "A moment", imagePrompt: "cinematic scene"}]} }
+  try { 
+    const j = JSON.parse(raw);
+    // sanitize
+    j.scenes = (j.scenes||[]).slice(0,6).map((s:any)=>({ caption: String(s.caption).slice(0,140), imagePrompt: String(s.imagePrompt).slice(0,400) }));
+    return j;
+  } catch { return { title: "Untitled Imagination", scenes: [{caption: chatHistory.slice(-1)[0]?.content?.slice(0,90) || "A moment", imagePrompt: "cinematic portrait scene, photorealistic, 9:16"}]} }
 }
