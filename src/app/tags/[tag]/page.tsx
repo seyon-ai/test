@@ -1,0 +1,1 @@
+export default function Tag({params}:{params:{tag:string}}){ return (<div className="max-w-[700px] mx-auto px-6 py-12"><h1 className="text-3xl font-bold">#{params.tag}</h1><p className="text-text-mid">Posts tagged with this.</p></div>) }

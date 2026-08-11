@@ -1,0 +1,3 @@
+export default function ChatSettings({params}:{params:{chatId:string}}){
+  return (<div className="max-w-[600px] mx-auto px-6 py-12"><h1 className="text-2xl font-bold">Chat Settings {params.chatId}</h1><p className="text-text-mid">Per-conversation AI personality tweak.</p><div className="glass rounded-2xl p-6 mt-6 flex gap-2"><button className="px-4 py-2 rounded-full bg-white text-black text-sm">Balanced</button><button className="px-4 py-2 rounded-full border border-white/10 text-sm">Wholesome</button><button className="px-4 py-2 rounded-full border border-white/10 text-sm">Sarcastic</button></div></div>)
+}

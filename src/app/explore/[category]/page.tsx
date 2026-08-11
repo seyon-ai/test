@@ -1,0 +1,1 @@
+export default function Category({params}:{params:{category:string}}){ return (<div className="max-w-[700px] mx-auto px-6 py-12"><h1 className="text-3xl font-bold">{decodeURIComponent(params.category)}</h1><p className="text-text-mid">Filtered feed for this mood/category.</p></div>) }

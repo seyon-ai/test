@@ -2,59 +2,36 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
       colors: {
-        ayurveda: {
-          green: "#2D6A4F",
-          "green-light": "#40916C",
-          "green-dark": "#1B4332",
-          navy: "#1B2A4A",
-          "navy-light": "#2D4A7A",
-          blush: "#F8E8E0",
-          cream: "#FDF5F0",
-          sage: "#B7C9A3",
-        },
+        bg: "#0A0A0B",
+        surface: "#161618",
+        "surface-elevated": "#1E1E21",
+        silver: "#C7CBD1",
+        "silver-bright": "#E8EAED",
+        "silver-dim": "#8A8D93",
+        "text-hi": "#F5F5F6",
+        "text-mid": "#A0A2A8",
+        "text-low": "#6B6D73",
+      },
+      borderColor: {
+        DEFAULT: "rgba(255,255,255,0.08)",
       },
       fontFamily: {
-        serif: ['"Playfair Display"', "Georgia", "serif"],
-        sans: ['"Inter"', "system-ui", "sans-serif"],
+        sans: ["Inter","sans-serif"],
+        display: ["Poppins","sans-serif"],
       },
-      animation: {
-        "marquee": "marquee 30s linear infinite",
-        "marquee-reverse": "marquee-reverse 30s linear infinite",
-        "fade-in": "fadeIn 0.6s ease-out forwards",
-        "slide-up": "slideUp 0.6s ease-out forwards",
-        "float": "float 6s ease-in-out infinite",
-      },
-      keyframes: {
-        marquee: {
-          "0%": { transform: "translateX(0%)" },
-          "100%": { transform: "translateX(-50%)" },
-        },
-        "marquee-reverse": {
-          "0%": { transform: "translateX(-50%)" },
-          "100%": { transform: "translateX(0%)" },
-        },
-        fadeIn: {
-          "0%": { opacity: "0" },
-          "100%": { opacity: "1" },
-        },
-        slideUp: {
-          "0%": { opacity: "0", transform: "translateY(20px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
-        },
-        float: {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-10px)" },
-        },
+      borderRadius: {
+        xl: "16px",
+        "2xl": "24px",
       },
     },
   },
   plugins: [],
 };
-
 export default config;

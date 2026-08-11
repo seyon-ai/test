@@ -1,0 +1,3 @@
+export default function Thread({params}:{params:{conversationId:string}}){
+  return (<div className="max-w-[640px] mx-auto px-6 py-6"><h1 className="font-semibold">Conversation {params.conversationId}</h1><div className="glass rounded-2xl p-4 mt-4 min-h-[360px] flex flex-col"><div className="flex-1 space-y-2"><div className="bg-white text-black rounded-2xl px-3 py-2 text-sm w-fit ml-auto">Hey!</div><div className="bg-white/10 rounded-2xl px-3 py-2 text-sm w-fit">Hey — love your imagination!</div></div><div className="flex gap-2 mt-4"><input className="flex-1 bg-white/5 border border-white/10 rounded-full px-4 py-2 text-sm" placeholder="Message..."/><button className="metallic px-5 py-2 rounded-full text-sm font-semibold">Send</button></div></div></div>)
+}

@@ -1,0 +1,1 @@
+export default function Page({params}:{params:{username:string}}){ return (<div className="max-w-[700px] mx-auto px-6 py-12"><h1 className="text-2xl font-bold capitalize">stories — @{ "{params.username}" }</h1><p className="text-text-mid">Real list from Firestore.</p></div>) }

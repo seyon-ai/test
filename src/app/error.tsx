@@ -1,0 +1,1 @@
+"use client"; export default function Error({error,reset}:{error:Error,reset:()=>void}){ return (<div className="max-w-[600px] mx-auto px-6 py-24 text-center"><h1 className="text-4xl font-bold">500</h1><p className="text-text-mid mt-2">{error.message}</p><button onClick={reset} className="mt-4 metallic px-6 py-2 rounded-full text-sm font-semibold">Retry</button></div>) }

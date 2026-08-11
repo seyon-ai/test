@@ -1,0 +1,1 @@
+export default function ConvSettings({params}:{params:{conversationId:string}}){ return (<div className="max-w-[600px] mx-auto px-6 py-12"><h1 className="text-2xl font-bold">Chat Settings {params.conversationId}</h1><p className="text-text-mid">Mute, block, clear.</p></div>) }

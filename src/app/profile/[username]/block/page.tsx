@@ -1,0 +1,1 @@
+export default function Block({params}:{params:{username:string}}){ return (<div className="max-w-[600px] mx-auto px-6 py-12"><h1 className="text-2xl font-bold">Block @{params.username}?</h1><p className="text-text-mid">Confirmation flow — writes blocked doc.</p><button className="mt-4 px-6 py-2 rounded-full bg-red-500 text-white text-sm">Confirm Block</button></div>) }

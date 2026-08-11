@@ -1,0 +1,1 @@
+export default function NotFound(){ return (<div className="max-w-[600px] mx-auto px-6 py-24 text-center"><h1 className="text-5xl font-bold">404</h1><p className="text-text-mid mt-2">This imagination doesn't exist yet.</p><a href="/" className="mt-6 inline-block metallic px-6 py-2 rounded-full text-sm font-semibold">Go Home</a></div>) }

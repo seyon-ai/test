@@ -1,0 +1,1 @@
+export default function Article({params}:{params:{article:string}}){ return (<div className="max-w-[700px] mx-auto px-6 py-12"><h1 className="text-2xl font-bold">{params.article}</h1><p className="text-text-mid">Help article content.</p></div>) }
