@@ -1,6 +1,7 @@
 export async function uploadToImgbb(file: File): Promise<string> {
-  const key = process.env.NEXT_PUBLIC_IMGBB_API_KEY;
-  if(!key) throw new Error("Missing NEXT_PUBLIC_IMGBB_API_KEY — get one free at api.imgbb.com");
+  // Support both Vercel var names — user added IMGBB_API_KEY but code expected NEXT_PUBLIC_IMGBB_API_KEY
+  const key = process.env.NEXT_PUBLIC_IMGBB_API_KEY || (process.env as any).IMGBB_API_KEY || (process.env as any).NEXT_PUBLIC_IMGBB_KEY;
+  if(!key) throw new Error("Missing imgbb key — add NEXT_PUBLIC_IMGBB_API_KEY (or IMGBB_API_KEY) in Vercel → Settings → Environment Variables → Redeploy");
   const form = new FormData();
   form.append("image", file);
   const res = await fetch(`https://api.imgbb.com/1/upload?key=${key}`, { method:"POST", body: form });
