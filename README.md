@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# IGMA 2.0 — Full SaaS Rebuild
 
-## Getting Started
+Instagram is for consuming. **IGMA is for creating imagination.**
 
-First, run the development server:
-
+## Quick Start
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env  # fill Firebase + GROQ + optional POLLINATIONS + IMGBB keys
+npm run dev    # http://localhost:3000
+npm run build  # production build (68 routes)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Architecture — FINAL (per spec)
+- **Firebase Spark (free)** — Auth (Google + email/password + magic link) + Firestore. **NO Firebase Storage** — use `imgbb` via `src/lib/imgbb.ts`.
+- **Groq `llama-3.3-70b-versatile`** — `src/lib/groq.ts` for reactor + studio + script extraction.
+- **Pollinations `gen.pollinations.ai`** ONLY via `src/app/api/media/image/route.ts` proxy — portrait 1080x1920, never expose key client-side.
+- **Browser TTS** — `window.speechSynthesis` in `ReelPlayer.tsx` — no hosted audio, no voiceUrl.
+- **Vercel** — `vercel.json` sets `maxDuration:60` for API routes (needs Pro for >10s).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Auth — REAL
+`src/hooks/useAuth.tsx` provides `AuthProvider` with:
+- `signInWithPopup(googleProvider)`
+- `signInWithEmailAndPassword` / `createUserWithEmailAndPassword`
+- `sendSignInLinkToEmail` + `isSignInWithEmailLink` + `signInWithEmailLink` (magic link completes sign-in)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Wrap is in `src/app/layout.tsx`. See `/login` and `/signup`.
 
-## Learn More
+## Data — REAL + Fallback
+`src/hooks/useStories.ts` uses Firestore real-time `onSnapshot` on `stories` collection. If Firebase not configured or no stories, UI falls back to curated seed data so Explore/Feed still works. Writes require real Firebase ID token.
 
-To learn more about Next.js, take a look at the following resources:
+## Duck Logo — REAL
+- Generated silver duck at `public/duck-logo.png` / `src/app/icon.png` / `src/app/apple-icon.png`
+- Used in `Navbar.tsx` as `<img src="/duck-logo.png">` + favicon via `metadata.icons`.
+- Brushed-silver body, graphite beak — matches Dark Black & Silver theme.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Pages (68)
+Feed, Explore (snap feed), Imagine Studio, Reels, Profile, Messages, Notifications, Settings, Search, Admin, Legal — all scaffolded per PAGE INVENTORY. Replace mock with Firestore as you connect .env.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Design Tokens
+`#0A0A0B` bg, `#161618` surface, `#C7CBD1` silver — see `globals.css` + `tailwind.config.ts` + `Mascot.tsx`.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Deploy: `vercel --prod` — set env vars in Vercel dashboard.
