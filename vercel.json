@@ -1,0 +1,22 @@
+{
+  "framework": "nextjs",
+  "functions": {
+    "src/app/api/media/image/route.ts": {
+      "maxDuration": 60
+    },
+    "src/app/api/groq/react/route.ts": {
+      "maxDuration": 60
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/media/image(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, immutable" }
+      ]
+    }
+  ],
+  "rewrites": [
+    { "source": "/reels/:id", "destination": "/reels/:id" }
+  ]
+}
