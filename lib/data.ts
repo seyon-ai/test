@@ -7,7 +7,7 @@ export const doctors = [
     experience: "5+ years",
     photo: "/images/dr-ayan.jpg",
     bio: "Dr. Ayan Patra is a highly qualified Ayurvedic physician with over 5 years of clinical experience. As an Assistant Professor and Consultant, he combines classical Ayurvedic principles with modern medical understanding to deliver personalized, root-cause treatments for his patients.",
-    specialities: ["Digestive & Metabolic Disorders", "Musculoskeletal & Joint Diseases", "Menstrual & Hormonal Disorders"],
+    specialities: ["Digestive & Metabolic Disorders", "Musculoskeletal & Joint Diseases", "Anorectal Disorders"],
   },
   {
     id: "dr-swati-prasad",
@@ -26,6 +26,7 @@ export const specialities = [
     id: "digestive-metabolic",
     category: "Digestive & Metabolic Disorders",
     icon: "🫃",
+    image: "/images/speciality-digestive.jpg",
     conditions: [
       {
         id: "grahani",
@@ -68,7 +69,8 @@ export const specialities = [
   {
     id: "musculoskeletal",
     category: "Musculoskeletal & Joint Diseases",
-    icon: "🦴",
+    icon: "",
+    image: "/images/speciality-joints.jpg",
     conditions: [
       {
         id: "sandhivata",
@@ -121,6 +123,7 @@ export const specialities = [
     id: "anorectal",
     category: "Anorectal Disorders",
     icon: "🩺",
+    image: "/images/speciality-anorectal.jpg",
     conditions: [
       {
         id: "arsha",
@@ -154,7 +157,8 @@ export const specialities = [
   {
     id: "menstrual-hormonal",
     category: "Menstrual & Hormonal Disorders",
-    icon: "",
+    icon: "🌸",
+    image: "/images/speciality-hormonal.jpg",
     conditions: [
       {
         id: "pcos-pcod",
@@ -200,7 +204,6 @@ export const clinicInfo = {
   name: "Agnivesh Ayurveda and Panchakarma Centre",
   tagline: "Your Health, Our Concern",
   phone: "+91 7044085126",
-  email: "contact@agniveshayurveda.com",
   address: "Sarenga-Goaltore Road, Sarenga, Bankura - 722150, West Bengal",
   fullAddress: "Agnivesh Ayurveda and Panchakarma Centre, Sarenga-Goaltore Road, Sarenga, Bankura - 722150, West Bengal",
   googleMapsQuery: "Agnivesh+Ayurveda+and+Panchakarma+Centre+Sarenga+Bankura+722150",

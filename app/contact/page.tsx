@@ -1,5 +1,5 @@
 import { clinicInfo } from "@/lib/data";
-import { Phone, Mail, MapPin, Clock, Leaf, ExternalLink } from "lucide-react";
+import { Phone, MapPin, Clock, Leaf, ExternalLink } from "lucide-react";
 
 export const metadata = {
   title: "Contact Us — Agnivesh Ayurveda and Panchakarma Centre",
@@ -23,7 +23,7 @@ export default function ContactPage() {
             <span className="w-12 h-px bg-ayurveda-green/30"></span>
           </div>
           <p className="text-ayurveda-navy/60 max-w-xl mx-auto mt-6">
-            We'd love to hear from you. Visit our clinic, call us, or send an email.
+            We'd love to hear from you. Visit our clinic or call us directly.
           </p>
         </div>
       </section>
@@ -94,26 +94,6 @@ export default function ContactPage() {
                   </p>
                   <p className="text-ayurveda-navy/50 text-sm mt-1">
                     Tap to call
-                  </p>
-                </div>
-              </a>
-
-              <a
-                href={`mailto:${clinicInfo.email}`}
-                className="flex items-start gap-4 p-5 bg-ayurveda-cream/50 rounded-2xl card-hover group border border-ayurveda-blush/50"
-              >
-                <div className="w-12 h-12 rounded-xl bg-ayurveda-green/10 flex items-center justify-center shrink-0">
-                  <Mail className="text-ayurveda-green" size={22} />
-                </div>
-                <div>
-                  <h3 className="font-medium text-ayurveda-navy mb-1">
-                    Email
-                  </h3>
-                  <p className="text-ayurveda-green font-medium">
-                    {clinicInfo.email}
-                  </p>
-                  <p className="text-ayurveda-navy/50 text-sm mt-1">
-                    We respond within 24 hours
                   </p>
                 </div>
               </a>
