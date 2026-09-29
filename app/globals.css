@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-sans text-ayurveda-navy antialiased bg-white;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-ayurveda-green text-white px-6 py-3 rounded-full font-medium 
+           hover:bg-ayurveda-green-dark transition-all duration-300 
+           shadow-lg hover:shadow-xl hover:-translate-y-0.5;
+  }
+  .btn-secondary {
+    @apply border-2 border-ayurveda-green text-ayurveda-green px-6 py-3 rounded-full 
+           font-medium hover:bg-ayurveda-green hover:text-white transition-all duration-300;
+  }
+  .section-padding {
+    @apply py-20 md:py-28 px-6 md:px-12;
+  }
+  .leaf-divider {
+    @apply flex items-center justify-center gap-3 my-6;
+  }
+  .card-hover {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, #2D6A4F, #1B4332);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .bg-leaf {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5 Q35 15 30 25 Q25 15 30 5' fill='%232D6A4F' opacity='0.03'/%3E%3C/svg%3E");
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #FDF5F0;
+}
+::-webkit-scrollbar-thumb {
+  background: #40916C;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2D6A4F;
+}
