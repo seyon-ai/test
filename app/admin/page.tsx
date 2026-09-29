@@ -89,6 +89,9 @@ export default function AdminPage() {
       })) as Appointment[];
       setAppointments(data);
       setLoading(false);
+    }, (err) => {
+      console.error("Appointments listener failed:", err);
+      setLoading(false);
     });
 
     // Fetch OPD schedule

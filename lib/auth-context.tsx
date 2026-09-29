@@ -49,21 +49,12 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// List of admin emails — update these with real admin emails
-// In production, use Firebase Custom Claims instead
-const ADMIN_EMAILS = [
-  "admin@agniveshayurveda.com",
-  "drayan@agniveshayurveda.com",
-  "drswati@agniveshayurveda.com",
-];
-
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const isAdmin = userData?.role === "admin" ||
-    (user?.email ? ADMIN_EMAILS.includes(user.email) : false);
+  const isAdmin = userData?.role === "admin";
 
   useEffect(() => {
     // Skip Firebase auth if not configured
@@ -75,34 +66,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser);
 
-      if (firebaseUser) {
-        if (!db) return;
-        // Check if user data exists in Firestore
-        const userRef = doc(db, "users", firebaseUser.uid);
-        const userSnap = await getDoc(userRef);
+      try {
+        if (firebaseUser && db) {
+          const userRef = doc(db, "users", firebaseUser.uid);
+          const userSnap = await getDoc(userRef);
 
-        if (userSnap.exists()) {
-          setUserData(userSnap.data() as UserData);
+          if (userSnap.exists()) {
+            setUserData(userSnap.data() as UserData);
+          } else {
+            // New users are always created as "user".
+            // Promote to admin manually in Firestore: users/{uid}.role = "admin"
+            const newUser: UserData = {
+              uid: firebaseUser.uid,
+              email: firebaseUser.email || "",
+              displayName: firebaseUser.displayName || "User",
+              role: "user",
+              createdAt: new Date().toISOString(),
+            };
+            if (firebaseUser.photoURL) newUser.photoURL = firebaseUser.photoURL;
+            await setDoc(userRef, newUser);
+            setUserData(newUser);
+          }
         } else {
-          // Create user document
-          const newUser: UserData = {
-            uid: firebaseUser.uid,
-            email: firebaseUser.email || "",
-            displayName: firebaseUser.displayName || "User",
-            photoURL: firebaseUser.photoURL || undefined,
-            role: ADMIN_EMAILS.includes(firebaseUser.email || "")
-              ? "admin"
-              : "user",
-            createdAt: new Date().toISOString(),
-          };
-          await setDoc(userRef, newUser);
-          setUserData(newUser);
+          setUserData(null);
         }
-      } else {
+      } catch (err) {
+        // Permission denied / offline etc. — never leave the app stuck on a spinner
+        console.error("Failed to load user profile:", err);
         setUserData(null);
+      } finally {
+        setLoading(false);
       }
-
-      setLoading(false);
     });
 
     return () => unsubscribe();
@@ -143,7 +137,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         uid: cred.user.uid,
         email,
         displayName: name,
-        role: ADMIN_EMAILS.includes(email) ? "admin" : "user",
+        role: "user",
         createdAt: new Date().toISOString(),
       };
       await setDoc(doc(db, "users", cred.user.uid), newUser);

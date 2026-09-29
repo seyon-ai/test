@@ -11,13 +11,15 @@ import {
   connectFirestoreEmulator,
 } from "firebase/firestore";
 
+// Firebase web config is public by design (security comes from Firestore rules
+// + Authorized domains), so it is safe to hardcode. Env vars still override.
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "",
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "",
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "",
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "",
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "",
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyD0q-La20UhjAQkPeps6CU_-PqfOsc--E4",
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "agniveshayurveda-67091.firebaseapp.com",
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "agniveshayurveda-67091",
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "agniveshayurveda-67091.firebasestorage.app",
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "985685759419",
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:985685759419:web:d82110d329fa211027a09e",
 };
 
 const isConfigValid = firebaseConfig.apiKey && firebaseConfig.projectId;

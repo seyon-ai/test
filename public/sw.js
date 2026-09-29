@@ -1,5 +1,5 @@
 // Service Worker for PWA
-const CACHE_NAME = "agnivesh-ayurveda-v1";
+const CACHE_NAME = "agnivesh-ayurveda-v2";
 const STATIC_ASSETS = [
   "/",
   "/doctors",
@@ -37,8 +37,12 @@ self.addEventListener("activate", (event) => {
 
 // Fetch — network first, fallback to cache
 self.addEventListener("fetch", (event) => {
-  // Skip API calls — always go to network
-  if (event.request.url.includes("/api/")) return;
+  // Only handle same-origin GET requests. Never touch Firebase/Google
+  // (Firestore, Auth) traffic or API calls — intercepting them breaks them.
+  const url = new URL(event.request.url);
+  if (event.request.method !== "GET") return;
+  if (url.origin !== self.location.origin) return;
+  if (url.pathname.startsWith("/api/") || url.pathname.startsWith("/__/")) return;
 
   event.respondWith(
     fetch(event.request)
