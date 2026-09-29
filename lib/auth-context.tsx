@@ -37,6 +37,7 @@ interface AuthContextType {
   userData: UserData | null;
   loading: boolean;
   isAdmin: boolean;
+  profileError: string | null;
   signInWithGoogle: () => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<void>;
   signUpWithEmail: (
@@ -53,8 +54,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [profileError, setProfileError] = useState<string | null>(null);
 
-  const isAdmin = userData?.role === "admin";
+  const isAdmin = String(userData?.role ?? "").trim().toLowerCase() === "admin";
 
   useEffect(() => {
     // Skip Firebase auth if not configured
@@ -65,6 +67,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser);
+      setProfileError(null);
 
       try {
         if (firebaseUser && db) {
@@ -90,9 +93,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         } else {
           setUserData(null);
         }
-      } catch (err) {
+      } catch (err: any) {
         // Permission denied / offline etc. — never leave the app stuck on a spinner
         console.error("Failed to load user profile:", err);
+        setProfileError(err?.code ? `${err.code}: ${err.message}` : String(err));
         setUserData(null);
       } finally {
         setLoading(false);
@@ -159,6 +163,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         userData,
         loading,
         isAdmin,
+        profileError,
         signInWithGoogle,
         signInWithEmail,
         signUpWithEmail,

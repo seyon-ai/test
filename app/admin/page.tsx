@@ -66,13 +66,15 @@ export default function AdminPage() {
   const [newOpdDate, setNewOpdDate] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const { user, userData, isAdmin, loading: authLoading, logout } = useAuth();
+  const { user, userData, isAdmin, loading: authLoading, logout, profileError } = useAuth();
   const router = useRouter();
 
   // Auth guard — redirect if not admin
   useEffect(() => {
-    if (!authLoading && (!user || !isAdmin)) {
-      router.push("/");
+    // Only bounce visitors who are not signed in; signed-in non-admins get a
+    // diagnostic screen below so we can see WHY access was denied.
+    if (!authLoading && !user) {
+      router.push("/auth");
     }
   }, [user, isAdmin, authLoading, router]);
 
@@ -154,7 +156,7 @@ export default function AdminPage() {
     setOpdDates([]);
   };
 
-  if (authLoading || loading) {
+  if (authLoading || (isAdmin && loading)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <Loader2 className="text-ayurveda-green animate-spin" size={40} />
@@ -162,7 +164,31 @@ export default function AdminPage() {
     );
   }
 
-  if (!user || !isAdmin) return null;
+  if (!user) return null;
+
+  if (!isAdmin) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
+        <div className="bg-white rounded-2xl shadow p-6 max-w-lg w-full text-sm">
+          <h1 className="text-xl font-bold text-red-600 mb-2">Admin access denied</h1>
+          <p className="text-gray-600 mb-4">
+            You are signed in, but this account is not marked as admin in Firestore.
+          </p>
+          <dl className="space-y-2 bg-gray-50 rounded-lg p-3 break-all">
+            <div><dt className="font-semibold">Signed-in email</dt><dd>{user.email}</dd></div>
+            <div><dt className="font-semibold">UID (users document ID must be exactly this)</dt><dd>{user.uid}</dd></div>
+            <div><dt className="font-semibold">role found in users/{"{uid}"}</dt><dd>{userData ? JSON.stringify(userData.role) : "no document loaded"}</dd></div>
+            <div><dt className="font-semibold">Firestore error</dt><dd>{profileError || "none"}</dd></div>
+          </dl>
+          <div className="flex gap-3 mt-4">
+            <button onClick={() => window.location.reload()} className="px-4 py-2 rounded-lg bg-ayurveda-green text-white">Reload</button>
+            <button onClick={() => logout()} className="px-4 py-2 rounded-lg border">Sign out</button>
+            <Link href="/" className="px-4 py-2 rounded-lg border">Home</Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const pendingCount = appointments.filter((a) => a.status === "pending").length;
   const todayStr = new Date().toISOString().split("T")[0];
