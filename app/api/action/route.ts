@@ -1,0 +1,10 @@
+import {getChatGPTUser} from '../../chatgpt-auth';
+import {loadWorkspace,saveWorkspace} from '../../../lib/database';
+import {effectiveRole} from '../../../lib/authorization.mjs';
+import {applyAction} from '../../../lib/engine.mjs';
+import {demoSeed} from '../../../lib/seed.mjs';
+export async function POST(request:Request){
+ try{const user=await getChatGPTUser();if(!user)return Response.json({error:'Authentication required'},{status:401});const origin=request.headers.get('origin');if(origin&&origin!==new URL(request.url).origin)return Response.json({error:'Forbidden origin'},{status:403});const raw=await request.text();if(raw.length>20000)return Response.json({error:'Request too large'},{status:413});const b=JSON.parse(raw);if(!b.eventId||typeof b.eventId!=='string'||b.eventId.length>100)throw new Error('A unique event ID is required');const w=await loadWorkspace(user.userId);const role=effectiveRole(w.role,b.role);
+ if(b.action==='resetDemo'){if(role!=='Admin')return Response.json({error:'Forbidden: your role cannot perform this action.'},{status:403});const state=demoSeed();const at=state.clock;state.auditEvents.push({id:crypto.randomUUID(),eventId:b.eventId,actorId:user.userId,actorRole:'Admin',type:'Demo data reset',enquiryId:null,detail:'Synthetic demo workspace reloaded',at});state.integrationEvents.push({id:crypto.randomUUID(),eventId:b.eventId,action:'resetDemo',enquiryId:null,at,status:'Processed',mode:'Demo'});await saveWorkspace(user.userId,state,w.revision);return Response.json({state,role,result:{reset:true}},{headers:{'Cache-Control':'no-store'}});}
+ const result=applyAction(w.state,b.action,b.payload,{id:user.userId,role},b.eventId);if(!result.duplicate||b.action==='replay')await saveWorkspace(user.userId,w.state,w.revision);return Response.json({state:w.state,role,result},{headers:{'Cache-Control':'no-store'}});}catch(e:any){const status=e.message.startsWith('Forbidden')?403:e.message.startsWith('Conflict')?409:400;return Response.json({error:e.message},{status});}
+}

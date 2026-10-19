@@ -1,0 +1,14 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {sites} from '../build/sites-vite-plugin.ts';
+function middleware(mode='serve',enabled=true){let fn;const p=sites({mockAuth:enabled});p.configResolved({root:process.cwd(),command:mode});p.configureServer({config:{server:{},logger:{info(){}}},middlewares:{use(f){fn=f;}}});return fn;}
+function invoke(fn,{host='localhost:5173',address='127.0.0.1',url='/signin-with-chatgpt?return_to=/',headers={},method='GET'}={}){const req={headers:{host,...headers},rawHeaders:[],socket:{remoteAddress:address},url,method};const res={statusCode:200,headers:{},ended:false,setHeader(k,v){this.headers[k]=v;},end(){this.ended=true;}};let next=false;fn(req,res,()=>next=true);return {req,res,next};}
+test('fixture disabled for production build and managed preview',()=>{assert.equal(middleware('build'),undefined);assert.equal(middleware('serve',false),undefined);});
+test('fictional fixture signs in only through a loopback development request',()=>{const {res}=invoke(middleware());assert.equal(res.statusCode,302);assert.match(res.headers['Set-Cookie'],/HttpOnly; SameSite=Lax/);assert.equal(res.headers.Location,'/');});
+test('fixture refuses nonlocal host even with local client address',()=>{assert.equal(invoke(middleware(),{host:'clinicflow-ai.yourdigitalchad.chatgpt.site'}).res.statusCode,403);});
+test('fixture refuses remote clients even with forged localhost Host',()=>{assert.equal(invoke(middleware(),{address:'192.0.2.4'}).res.statusCode,403);});
+test('fixture rejects cross-origin sign-in',()=>{assert.equal(invoke(middleware(),{headers:{origin:'https://example.test'}}).res.statusCode,403);});
+test('fixture assigns fictional administrator identity and strips supplied identities',()=>{const r=invoke(middleware(),{url:'/api/state',headers:{cookie:'__sites_local_auth=1','oai-authenticated-user-id':'forged'}});assert.equal(r.req.headers['oai-authenticated-user-id'],'local_clinicflow_demo_admin');assert.equal(r.req.headers['oai-authenticated-user-email'],'admin@clinicflow.test');assert.equal(r.next,true);});
+test('unauthenticated request cannot forge identity',()=>{const r=invoke(middleware(),{url:'/api/state',headers:{'oai-authenticated-user-id':'forged','oai-authenticated-user-email':'forged@example.test'}});assert.equal(r.req.headers['oai-authenticated-user-id'],undefined);assert.equal(r.req.headers['oai-authenticated-user-email'],undefined);});
+test('fixture redirects only to same-origin non-auth paths',()=>{assert.equal(invoke(middleware(),{url:'/signin-with-chatgpt?return_to=https://example.test'}).res.headers.Location,'/');assert.equal(invoke(middleware(),{url:'/signin-with-chatgpt?return_to=/callback'}).res.headers.Location,'/');});
+test('fixture sign-out expires development session cookie',()=>{assert.match(invoke(middleware(),{url:'/signout-with-chatgpt',method:'POST'}).res.headers['Set-Cookie'],/Max-Age=0/);});

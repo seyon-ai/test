@@ -1,0 +1,31 @@
+{
+  "at": "2026-10-11T05:33:48.986Z",
+  "results": [
+    {
+      "test": "Anonymous document",
+      "status": 401,
+      "contentType": "text/html; charset=utf-8",
+      "signInGate": true
+    },
+    {
+      "test": "Anonymous API read",
+      "status": 401,
+      "contentType": "text/html; charset=utf-8",
+      "signInGate": true
+    },
+    {
+      "test": "Service request cannot impersonate browser identity",
+      "status": 401,
+      "contentType": "application/json",
+      "signInGate": false,
+      "error": "Sign in with ChatGPT to open your private demo."
+    },
+    {
+      "test": "Unauthenticated appointment mutation rejected",
+      "status": 401,
+      "contentType": "application/json",
+      "signInGate": false,
+      "error": "Authentication required"
+    }
+  ]
+}
